@@ -1,6 +1,6 @@
 # `.pro`
 
-A `.pro` file is an autonomous biomedical procedure graph whose robotic steps are written in word-address `.gcode`. In a stable environment, a presented group acts on the graph by plunger-conserving rewrites; across changing environments, a sheaf restricts the graph to a local procedure, and each realtime cycle returns a specification rather than commanding hardware. Robotics `(mainframe, policy)` and synthetic biology `(locus, program)` are two charts on that one discrete manifold. The chart group is the Klein four-group with its commutative geometric product. A nucleotide sequence is not a coordinate.
+A `.pro` file is an autonomous biomedical procedure graph whose robotic steps compile to word-address `.gcode`. In a stable environment, a compact abelian Lie group (`V4` on two channels, with commutative geometric product `mul`) acts on the right by plunger-conserving rewrites; across changing environments, a hardware sheaf restricts the graph to a local procedure, and each realtime cycle returns a specification rather than commanding hardware. Robotics `(mainframe, policy)` and synthetic biology `(locus, program)` are charts on that one discrete manifold; a nucleotide sequence is not a coordinate.
 
 ```toml
 [pro]
@@ -8,7 +8,7 @@ media_type       = "text/vnd.pro+markdown"
 instruction_type = "text/x-gcode"
 extension        = ".pro"
 instruction      = ".gcode"
-version          = "1.2.0"
+version          = "1.2.1"
 
 [form]
 domain         = "bio/med"
@@ -31,14 +31,14 @@ users   = "agents"
 
 1. **Superset & traversal.** Every CommonMark `.md` or OpenGigantic `.og` file is a valid `.pro` link graph. Entry is `::index`; `:requires` loads a dependency; `::warning` is never skipped; `scope` gates visibility; graphs compose across `uri#id` edges. For a manifested procedure, the unique `version` with `current=true` is the read endpoint.
 2. **Object & fields.** A procedure is a finite directed graph over `robotic` and `synthetic` steps; `:couples` is their only cross-field edge. A synthetic slot carries `payload-class` `empty` or `water`; `volume`, `unit`, and `vessel` are inert fixture metadata, not rewrite targets.
-3. **`.gcode` instruction style.** Robotic steps express motion and metering as ISO 6983 / RS-274 word-address `.gcode` blocks (`N`, `G`, `M`, `T`, `X`, `Y`, `Z`, `E`, `F`, `P`, `S`), never free-form imperative prose. A conforming version linearizes enabled robotic steps along `:precedes` into a self-contained `.gcode` program whose modal preface (`G21`, `G90`, `M83`) and gantry homing (`G28`) precede all `G0`/`G1` moves, whose selected toolheads (`T0`, `T1`, ...) lie in the active open, whose intermediate plunger loads stay non-negative, and whose terminal plunger load returns to `0` (`M400`). Independent channel subprograms commute as a Mazurkiewicz trace; canonical emission orders branches by `::index` rank.
-4. **Rewrite group.** Over `n` independent channels, autonomous writes in a stable environment form a right action of `Gamma_n ~= (Z/2Z)^n` (or a presented subgroup `Gamma`); identity `e` is a read. On the canonical two-channel carrier, `V4 = < toggle-a, toggle-b >` is the unique subgroup of the `2^5` five-step masks whose action preserves `.gcode` homing and zero plunger residual (`Delta E = +10` paired with `Delta E = -10`). On open `U`, admitted writes are the fiber-stabilizing subgroup `Gamma(U) = { g in Gamma | forall s in F(U), act(g, s) in F(U) }`.
-5. **Environment sheaf.** Finite channel sets induce the locale `(P(C), <=)` (`none <= a, b <= ab` for `C = {a, b}`). A section `s in F(U)` pairs channel bits supported on `U` with the global `home` bit. Restriction `rho^U_V : F(U) -> F(V)` (`V <= U`) is contravariant, functorial, and idempotent, masking channels outside `V` while preserving `home` and `.gcode` validity. Sections on any cover `(U, V)` glue uniquely to `U cup V` iff they agree on `U cap V`; disagreement on `home` or on an overlap channel has no glue.
-6. **Realtime loop.** One `Loop(SENSE, graph.∆Transform, ACT)` cycle senses one environment tuple `(updates, constraints, operators, hardware)` and one proposal, admits at most one transform, and acts once. `updates` are trace heartbeats: an updates-only sense with `id` is a `read`. Reads and refusals record trace events without allocating a version; an admitted write appends one immutable `version` naming its `parent`.
+3. **`.gcode` instruction style.** Robotic steps express motion and metering as ISO 6983 / RS-274 word-address `.gcode` blocks (`N`, `G`, `M`, `T`, `X`, `Y`, `Z`, `E`, `F`, `P`, `S`), never free-form imperative prose. A conforming version linearizes enabled robotic steps along `:precedes` into a self-contained `.gcode` program whose modal preface (`G21`, `G90`, `M83`) and single gantry homing (`G28`) precede all tool selections and `G0`/`G1` moves, whose selected toolheads (`T0`, `T1`, ...) lie in the active open, whose intermediate plunger loads stay non-negative, and whose actuated channels synchronize at terminal plunger load `0` (`M400`). Independent channel subprograms commute across every `:precedes` linearization as a Mazurkiewicz trace; canonical emission orders concurrent branches by `::index` rank, strips `;` comments, and renumbers lines `N10, N20, ...` (`10 * i`).
+4. **Rewrite group.** Over `n` independent channels, autonomous writes in a stable environment form a right action of `Gamma_n ~= (Z/2Z)^n` (or a presented subgroup `Gamma`); identity `e` is a read. On the canonical two-channel carrier, `V4 = < toggle-a, toggle-b >` is the unique subgroup of the `2^5` five-step masks whose action preserves `.gcode` homing, `M400` sync, and zero plunger residual (`Delta E = +10` paired with `Delta E = -10`). On open `U`, admitted writes draw generators from the fiber-stabilizing subgroup `Gamma(U) = { g in Gamma | forall s in F(U), act(g, s) in F(U) }`, gated by operator coverage and policy constraints on the target section.
+5. **Environment sheaf.** Finite channel sets induce the locale `(P(C), <=)` (`none <= a, b <= ab` for `C = {a, b}`). A section `s in F(U)` pairs channel bits supported on `U` with the global `home` bit. Restriction `rho^U_V : F(U) -> F(V)` (`V <= U`) is contravariant, functorial, and idempotent, masking channels outside `V` while preserving `home` and `.gcode` validity; because `V4` has exponent `2`, no non-trivial restriction is induced by a group element. Sections on any cover `(U, V)` glue uniquely to `U cup V` iff they agree on `U cap V`; disagreement on `home` or on an overlap channel has no glue.
+6. **Realtime loop.** One `Loop(SENSE, graph.∆Transform, ACT)` cycle senses one environment tuple `(updates, constraints, operators, hardware)` and one proposal, admits at most one transform, and acts once. `updates` are trace heartbeats: an updates-only sense with `id` or `restrict` is a `read`. Reads and refusals record trace events without allocating a version; an admitted write appends one immutable `version` naming its `parent`.
 7. **Local adaptation.** When the snapshot `(hardware, operators, constraints)` changes from current open `U` to sensed open `V`, `adapt-procedure-locally` preempts the proposal. If `V <= U`, candidate `q = rho^U_V(current)` writes one `restrict` local procedure iff sensed operators cover `q`, sensed constraints accept `q`, and `q` is `.gcode`-valid on `V`; if `~Le(V, U)`, no canonical extension exists (`no-extension`); if operator or constraint checks fail, the result is `ill-formed-environment`.
 8. **Version & anchor algebra.** Every version records an orbit `anchor` and relative group element `rel` satisfying `sec(v) = act(rel(v), sec(anchor(v)))`. A group toggle preserves `anchor`, stores its generator as `inverse`, and right-multiplies `rel`. A sheaf restriction has `inverse=none`, sets `anchor` to the new version, resets `rel=e`, and rolls back only via `parent`. Equality of generator words, group elements, sections, and version chains are four distinct relations.
-9. **Scope & output boundary.** `agent` and `orchestrator` are provenance tags with identical admission (`ScopeParity`). The closed manifest grammar admits no sequence, organism, strain, toxin, patient identifier, diagnosis, treatment, or administration attribute, and `.gcode` words admit numeric addresses only. `ACT` returns a `.pro` specification and never drives a stage, executes a wet-lab protocol, or authorizes clinical use; [DISCLAIMER](DISCLAIMER) governs every read.
-10. **State-space charts.** One discrete manifold `M` collects the conforming sections: `home` on, each enabled arm paired (`E10` with `E-10`), toolheads inside the open. `V4` is its compact abelian Lie group of dimension 0. The geometric product is `mul`: associative, commutative, unital, and of exponent 2. The group commutator `g * h * g * h` is `e` for every pair, so the Lie bracket is trivial. That product is not the anticommuting Clifford product of a Euclidean plane. Two charts land in `M`. The robotics chart `Φ_rob(mainframe, policy)` is the admissible set `{ s ∈ F(mainframe) | s.home ∧ PolicyOK(policy, s) }`. The synthetic-biology chart `Φ_syn(locus, program)` names a point of `M`: `locus` is an open (`none`, `a`, `b`, `ab`), `program` is an element `g` of `V4`, and the point is `act(g, sFull)` when that section is supported on the locus. That point lies in `Φ_rob(locus, policy)` exactly when `PolicyOK` accepts it; under `single`, `Φ_syn(e)` is outside the robotics chart. `Φ_syn` is equivariant for the right action, `act(h, Φ_syn(g)) = Φ_syn(mul(g, h))`. On open `ab` with `policy = pairing`, the orbit of `sFull` is every home-on section and equals `Φ_rob(ab, pairing)`. Natural-language annotations remain `TEXT_LINE` and `;` comments; they are not coordinates. A boolean program is only this `V4` element. A nucleotide sequence, genetic part, organism, chassis, or a circuit step whose proposal is not already `id`, `toggle-a`, `toggle-b`, or `restrict` is not a point of `M`. `Admit` returns `ill-formed`. Both charts linearize through the one `.gcode` compiler.
+9. **Scope & output boundary.** `all` is a node visibility scope; caller provenance is `agent` or `orchestrator` with identical admission (`ScopeParity`). The closed manifest grammar admits no sequence, organism, strain, toxin, genetic part, chassis, patient identifier, diagnosis, treatment, or administration attribute, and `.gcode` words admit numeric addresses only. `ACT` returns a `.pro` specification and never drives a stage, executes a wet-lab protocol, or authorizes clinical use; [DISCLAIMER](DISCLAIMER) governs every read.
+10. **State-space charts.** Homed, paired-channel markings form a discrete manifold `M = { s in Sec | s.home }` on which the 0-dimensional compact abelian Lie group `V4` acts freely and transitively on the right via global orbit bijection `iota(g) = act(g, sFull)`. Its geometric product `mul` is associative, commutative, unital, and of exponent `2`, with group commutator `g * h * g * h = e` and trivial Lie bracket — never the anticommuting Euclidean Clifford product. Two charts land in `M`: the robotics chart `Φ_rob(mainframe, policy) = { s in M | supported(mainframe, s) /\ PolicyOK(policy, s) }` cuts out admissible sections (`Φ_rob(ab, pairing) = M`; `iota(e) = sFull` lies outside `Φ_rob(ab, single)`), and the synthetic-biology chart `Φ_syn(locus, program)` partially maps `(U, g)` to `iota(g)` when `supported(U, iota(g))`, satisfying `Gamma(U)`-equivariance `(Φ_syn(U, g)).map (act h) = Φ_syn(U, mul(g, h))` for `h in Gamma(U)`. Natural-language annotations remain `TEXT_LINE` and `;` comments; a nucleotide sequence, genetic part, organism, chassis, or bare `circuit` proposal outside `{id, toggle-a, toggle-b, restrict}` is not a coordinate (`Admit = ill-formed`), and both charts compile through `.gcode`.
 
 ## 2. Ontology, G-Code & Rewrite Algebra (`lean`)
 
@@ -59,7 +59,7 @@ The canonical rewrite group is
 
 `V4 = < toggle-a, toggle-b | toggle-a^2 = toggle-b^2 = e, toggle-a * toggle-b = toggle-b * toggle-a >`,
 
-acting on the right (`act(g * h, s) = act(h, act(g, s))`) as the `n = 2` specialization of `toggleN` on `(Z/2Z)^n`. That multiplication is the geometric product on the carrier. The robotics chart cuts out an admissible submanifold of sections, and the synthetic-biology chart names a point of the orbit of `sFull`. Over the five robotic `.gcode` step blocks (`step-home`, `step-asp-a`, `step-disp-a`, `step-asp-b`, `step-disp-b`), `gcodeCharacterization` proves across all `4 * 2^5 = 128` `(open, mask)` pairs that a subset compiles to a homed, tool-supported, zero-residual `.gcode` program if and only if `home = true`, each channel's aspirate (`E10`) and dispense (`E-10`) toggle as one pair, and enabled toolheads lie in `open`.
+acting on the right (`act(g * h, s) = act(h, act(g, s))`) as the `n = 2` specialization of `toggleN` on `(Z/2Z)^n`. That multiplication is the geometric product on the carrier. The robotics chart `Φ_rob(u, p)` cuts out policy-admissible homed sections on `u`, and the synthetic-biology chart `Φ_syn(u, g)` partially embeds the `sFull`-orbit `iota(g)` onto `u`. Over the five robotic `.gcode` step blocks (`step-home`, `step-asp-a`, `step-disp-a`, `step-asp-b`, `step-disp-b`), `gcodeCharacterization` proves across all `4 * 2^5 = 128` `(open, mask)` pairs that a subset compiles to a homed, tool-supported, `M400`-synced, zero-residual `.gcode` program if and only if `home = true`, each channel's aspirate (`E10`) and dispense (`E-10`) toggle as one pair, and enabled toolheads lie in `open`.
 
 ```lean
 inductive NodeType | procedure | step | gate | transform | environment | version | invariant | «meta»
@@ -75,6 +75,8 @@ inductive Scope | all | agent | orchestrator
 inductive Chan | a | b
   deriving DecidableEq, Repr
 inductive Open | none | oa | ob | ab
+  deriving DecidableEq, Repr
+inductive Pol | pairing | single
   deriving DecidableEq, Repr
 
 def toggleN : List Bool → List Bool → List Bool := List.zipWith bne
@@ -146,6 +148,8 @@ def mul : G → G → G
   | .ab, .b => .a
   | .ab, .ab => .e
 
+def commutator (g h : G) : G := mul (mul (mul g h) g) h
+
 def evalWord (w : List Gen) : G :=
   w.foldl (fun acc x => mul acc (genElem x)) .e
 
@@ -184,18 +188,21 @@ structure Machine where
   z      : Nat
   loadA  : Int
   loadB  : Int
+  syncA  : Bool
+  syncB  : Bool
   deriving DecidableEq, Repr
 
 def initMachine : Machine :=
-  ⟨false, false, false, false, none, 0, 0, 0, 0, 0⟩
+  ⟨false, false, false, false, none, 0, 0, 0, 0, 0, true, true⟩
 
 def stepInstr (u : Open) (m : Machine) : GInstr → Option Machine
   | .g21 => some { m with metric := true }
   | .g90 => some { m with absXYZ := true }
   | .m83 => some { m with relE := true }
   | .g28 =>
-      if m.metric && m.absXYZ && m.relE then
-        some { m with homed := true, x := 0, y := 0, z := 0, loadA := 0, loadB := 0 }
+      if m.metric && m.absXYZ && m.relE && !m.homed && m.active == none &&
+         m.loadA == 0 && m.loadB == 0 then
+        some { m with homed := true, x := 0, y := 0, z := 0 }
       else none
   | .tool c =>
       if m.homed && hasChan u c then some { m with active := some c } else none
@@ -207,16 +214,20 @@ def stepInstr (u : Open) (m : Machine) : GInstr → Option Machine
       if m.metric && m.absXYZ && m.relE && m.homed && f > 0 && de != 0 then
         match m.active with
         | some .a =>
-            if 0 ≤ m.loadA + de then some { m with loadA := m.loadA + de } else none
+            if 0 ≤ m.loadA + de then
+              some { m with loadA := m.loadA + de, syncA := false }
+            else none
         | some .b =>
-            if 0 ≤ m.loadB + de then some { m with loadB := m.loadB + de } else none
+            if 0 ≤ m.loadB + de then
+              some { m with loadB := m.loadB + de, syncB := false }
+            else none
         | none => none
       else none
   | .m400 =>
       match m.homed, m.active with
-      | true, some .a => if m.loadA == 0 then some m else none
-      | true, some .b => if m.loadB == 0 then some m else none
-      | true, none    => some m
+      | true, some .a => if m.loadA == 0 then some { m with syncA := true } else none
+      | true, some .b => if m.loadB == 0 then some { m with syncB := true } else none
+      | true, none    => if m.loadA == 0 && m.loadB == 0 then some m else none
       | false, _      => none
 
 def runProg (u : Open) (prog : List GInstr) : Option Machine :=
@@ -224,8 +235,10 @@ def runProg (u : Open) (prog : List GInstr) : Option Machine :=
 
 def gcodeValid (u : Open) (prog : List GInstr) : Bool :=
   match runProg u prog with
-  | some m => m.metric && m.absXYZ && m.relE && m.homed && m.loadA == 0 && m.loadB == 0
-  | none   => false
+  | some m =>
+      m.metric && m.absXYZ && m.relE && m.homed &&
+      m.loadA == 0 && m.loadB == 0 && m.syncA && m.syncB
+  | none => false
 
 def gHome  : List GInstr := [.g21, .g90, .m83, .g28]
 def gAspA  : List GInstr := [.tool .a, .g0 10 20 5 3000, .g1 10 300]
@@ -243,21 +256,54 @@ def compileMask (h a1 a2 b1 b2 : Bool) : List GInstr :=
 def compileSec (s : Sec) : List GInstr :=
   compileMask s.home s.armA s.armA s.armB s.armB
 
-def compileSecBA (s : Sec) : List GInstr :=
-  (if s.home then gHome else []) ++
-  (if s.armB then gAspB ++ gDispB else []) ++
-  (if s.armA then gAspA ++ gDispA else [])
+def traceLinearizations (s : Sec) : List (List GInstr) :=
+  let h  := if s.home then gHome else []
+  let a1 := if s.armA then gAspA else []
+  let a2 := if s.armA then gDispA else []
+  let b1 := if s.armB then gAspB else []
+  let b2 := if s.armB then gDispB else []
+  [ h ++ a1 ++ a2 ++ b1 ++ b2
+  , h ++ a1 ++ b1 ++ a2 ++ b2
+  , h ++ a1 ++ b1 ++ b2 ++ a2
+  , h ++ b1 ++ b2 ++ a1 ++ a2
+  , h ++ b1 ++ a1 ++ b2 ++ a2
+  , h ++ b1 ++ a1 ++ a2 ++ b2 ]
+
+structure Ops where
+  home     : Bool
+  aspirate : Bool
+  dispense : Bool
+  deriving DecidableEq, Repr
+
+def opsAll : Ops := ⟨true, true, true⟩
+
+def covers (os : Ops) (s : Sec) : Bool :=
+  os.home && (!(s.armA || s.armB) || (os.aspirate && os.dispense))
+
+def policyOK : Pol → Sec → Bool
+  | .pairing, _ => true
+  | .single, s  => !(s.armA && s.armB)
+
+structure Env where
+  openSet : Open
+  ops     : Ops
+  policy  : Pol
+  upd     : Bool
+  deriving DecidableEq, Repr
+
+def snapEq (e1 e2 : Env) : Bool :=
+  e1.openSet == e2.openSet && e1.ops == e2.ops && e1.policy == e2.policy
 
 inductive Proposal | id | restrict | toggle (g : Gen) | unpaired | sequence | circuit | other
   deriving DecidableEq, Repr
 
 inductive Event
   | read | writeToggle (g : Gen) | writeRestrict
-  | illFormed | notAdmitted | noExtension
+  | illFormed | notAdmitted | illFormedEnvironment | noExtension
   deriving DecidableEq, Repr
 
 structure VerState where
-  openSet   : Open
+  env       : Env
   sec       : Sec
   anchorSec : Sec
   rel       : G
@@ -265,41 +311,82 @@ structure VerState where
   events    : List Event
   deriving DecidableEq, Repr
 
-def stepCycle (st : VerState) (sensed : Open) (prop : Proposal) (_sc : Scope) : VerState :=
-  if sensed != st.openSet then
-    if le sensed st.openSet then
-      let q := restrict sensed st.sec
-      { openSet := sensed, sec := q, anchorSec := q, rel := .e
-      , writes := st.writes + 1, events := st.events ++ [.writeRestrict] }
+def admit (cur : Env) (s : Sec) (sensed : Env) (prop : Proposal) (sc : Scope) : Event :=
+  if sc == .all then .illFormed
+  else if !snapEq sensed cur then
+    if !le sensed.openSet cur.openSet then .noExtension
     else
-      { st with events := st.events ++ [.noExtension] }
+      let q := restrict sensed.openSet s
+      if q.home && supported sensed.openSet q &&
+         covers sensed.ops q && policyOK sensed.policy q then .writeRestrict
+      else .illFormedEnvironment
   else
     match prop with
-    | .id | .restrict => { st with events := st.events ++ [.read] }
+    | .id | .restrict => .read
     | .toggle g =>
         let elem := genElem g
-        if inSubgroup st.openSet elem then
-          { st with
-            sec := act elem st.sec
-            rel := mul st.rel elem
-            writes := st.writes + 1
-            events := st.events ++ [.writeToggle g] }
-        else
-          { st with events := st.events ++ [.notAdmitted] }
-    | .unpaired | .sequence | .circuit | .other => { st with events := st.events ++ [.illFormed] }
+        let q := act elem s
+        if inSubgroup cur.openSet elem && q.home && supported cur.openSet q &&
+           covers cur.ops q && policyOK cur.policy q then
+          .writeToggle g
+        else .notAdmitted
+    | .unpaired | .sequence | .circuit | .other => .illFormed
 
-def allGs    : List G    := [.e, .a, .b, .ab]
-def allOpens : List Open := [.none, .oa, .ob, .ab]
-def allBools : List Bool := [false, true]
-def allSecs  : List Sec  :=
+def stepCycle (st : VerState) (sensed : Env) (prop : Proposal) (sc : Scope) : VerState :=
+  let ev := admit st.env st.sec sensed prop sc
+  match ev with
+  | .writeRestrict =>
+      let q := restrict sensed.openSet st.sec
+      { env := sensed, sec := q, anchorSec := q, rel := .e
+      , writes := st.writes + 1, events := st.events ++ [ev] }
+  | .writeToggle g =>
+      let elem := genElem g
+      { st with
+        env := { st.env with upd := sensed.upd }
+        sec := act elem st.sec
+        rel := mul st.rel elem
+        writes := st.writes + 1
+        events := st.events ++ [ev] }
+  | _ =>
+      { st with
+        env := { st.env with upd := sensed.upd }
+        events := st.events ++ [ev] }
+
+def sFull : Sec := ⟨true, true, true⟩
+def env0  : Env := ⟨.ab, opsAll, .pairing, false⟩
+def env1  : Env := ⟨.oa, opsAll, .pairing, true⟩
+def v0    : VerState := ⟨env0, sFull, sFull, .e, 0, []⟩
+
+def iota (g : G) : Sec := act g sFull
+
+def phiSyn (u : Open) (g : G) : Option Sec :=
+  let s := iota g
+  if supported u s then some s else none
+
+def inChartRob (u : Open) (p : Pol) (s : Sec) : Bool :=
+  supported u s && policyOK p s && s.home
+
+def allGs        : List G        := [.e, .a, .b, .ab]
+def allOpens     : List Open     := [.none, .oa, .ob, .ab]
+def allBools     : List Bool     := [false, true]
+def allPols      : List Pol      := [.pairing, .single]
+def allProposals : List Proposal :=
+  [.id, .restrict, .toggle .toggleA, .toggle .toggleB, .unpaired, .sequence, .circuit, .other]
+def allOps : List Ops :=
+  allBools.flatMap fun h => allBools.flatMap fun a => allBools.map fun d => ⟨h, a, d⟩
+def opsReps : List Ops := [⟨false, true, true⟩, ⟨true, false, false⟩, opsAll]
+def snapReps : List Env :=
+  allOpens.flatMap fun u => opsReps.flatMap fun os => allPols.map fun p => ⟨u, os, p, false⟩
+def allSecs : List Sec :=
   allBools.flatMap fun a => allBools.flatMap fun b => allBools.map fun h => ⟨a, b, h⟩
-def vecs3    : List (List Bool) :=
+def vecs3 : List (List Bool) :=
   allBools.flatMap fun x => allBools.flatMap fun y => allBools.map fun z => [x, y, z]
 
 def nChanLaws : Bool :=
   vecs3.all fun g => vecs3.all fun h => vecs3.all fun s =>
     toggleN [false, false, false] s == s &&
     toggleN g (toggleN g s) == s &&
+    toggleN g h == toggleN h g &&
     toggleN (toggleN g h) s == toggleN h (toggleN g s) &&
     restrictN g (restrictN g s) == restrictN g s &&
     (!(leN g h) || restrictN g (restrictN h s) == restrictN g s)
@@ -318,6 +405,7 @@ def groupLaws : Bool :=
       inSubgroup u g == allSecs.all (fun s => !supported u s || supported u (act g s))
 
 def sheafLaws : Bool :=
+  allGs.all (fun h => !(allSecs.all fun s => !s.home || restrict .oa s == act h s)) &&
   allOpens.all fun u => allOpens.all fun v => allOpens.all fun w =>
     (allSecs.all fun s =>
       (!(le w v && le v u) || restrict w (restrict v s) == restrict w s) &&
@@ -346,43 +434,57 @@ def gcodeCharacterization : Bool :=
 
 def gcodeTraceCommute : Bool :=
   allOpens.all fun u => allSecs.all fun s =>
-    (!s.home || !supported u s) ||
-      (gcodeValid u (compileSec s) &&
-       gcodeValid u (compileSecBA s))
-
-def sFull : Sec := ⟨true, true, true⟩
-def v0    : VerState := ⟨.ab, sFull, sFull, .e, 0, []⟩
-
-inductive Pol | pairing | single
-  deriving DecidableEq, Repr
-
-def policyOK : Pol → Sec → Bool
-  | .pairing, _ => true
-  | .single, s => !(s.armA && s.armB)
-
-def iota (g : G) : Sec := act g sFull
-
-def commutator (g h : G) : G := mul (mul (mul g h) g) h
-
-def inChartRob (u : Open) (p : Pol) (s : Sec) : Bool :=
-  supported u s && policyOK p s && s.home
+    (traceLinearizations s).all fun prog =>
+      gcodeValid u prog == (s.home && supported u s)
 
 def chartLaw : Bool :=
   allGs.all fun g =>
     iota (mul g g) == sFull &&
+    phiSyn .ab g == some (iota g) &&
     inChartRob .ab .pairing (iota g) &&
-    allGs.all fun h =>
+    (allGs.all fun h =>
       act h (iota g) == iota (mul g h) &&
       commutator g h == .e &&
-      mul g h == mul h g
+      mul g h == mul h g) &&
+    (allOpens.all fun u =>
+      (allPols.all fun p =>
+        (match phiSyn u g with | some s => inChartRob u p s | none => false) ==
+          (supported u (iota g) && policyOK p (iota g))) &&
+      (allGs.all fun h =>
+        !inSubgroup u h || (phiSyn u g).map (act h) == phiSyn u (mul g h)))
 
 def orbitLaw : Bool :=
-  (allSecs.all fun s => !s.home || allGs.any fun g => iota g == s) &&
-  (allGs.all fun g => allGs.all fun h => iota g != iota h || g == h) &&
+  (allSecs.all fun s => !s.home || (allGs.filter fun g => iota g == s) ==
+    (match s.armA, s.armB with
+     | true,  true  => [.e]
+     | false, true  => [.a]
+     | true,  false => [.b]
+     | false, false => [.ab])) &&
   inChartRob .ab .single (iota .e) == false &&
   inChartRob .ab .single (iota .a) &&
   inChartRob .ab .single (iota .b) &&
   inChartRob .ab .single (iota .ab)
+
+def kernelLaws : Bool :=
+  let validCur := snapReps.flatMap fun cur =>
+    (allSecs.filter fun s => inChartRob cur.openSet cur.policy s && covers cur.ops s).map (cur, ·)
+  (allOps.all fun os => allSecs.all fun s =>
+    covers os s == covers ⟨os.home, os.aspirate && os.dispense, os.aspirate && os.dispense⟩ s) &&
+  validCur.all fun (cur, s) =>
+    snapReps.all fun sensed =>
+      allProposals.all fun pr =>
+        let sensedUpd := { sensed with upd := !cur.upd }
+        let st1 := stepCycle ⟨cur, s, s, .e, 0, []⟩ sensedUpd pr .agent
+        admit cur s sensed pr .all == .illFormed &&
+        admit cur s sensed pr .agent == admit cur s sensed pr .orchestrator &&
+        (snapEq sensed cur ||
+          let ev := admit cur s sensed pr .agent
+          ev == .writeRestrict || ev == .noExtension || ev == .illFormedEnvironment) &&
+        act st1.rel st1.anchorSec == st1.sec &&
+        inChartRob st1.env.openSet st1.env.policy st1.sec &&
+        covers st1.env.ops st1.sec &&
+        (!(snapEq sensed cur && (pr == .id || pr == .restrict)) ||
+          (st1.events == [.read] && st1.writes == 0 && st1.sec == s))
 
 theorem v4_laws :
     nChanLaws = true ∧
@@ -405,31 +507,44 @@ theorem gcode_laws :
     gcodeCharacterization = true ∧
     gcodeTraceCommute = true ∧
     gcodeValid .ab (gHome ++ gDispA ++ gAspA) = false ∧
+    gcodeValid .ab (gHome ++ gAspA ++ [.g28]) = false ∧
+    gcodeValid .ab (gHome ++ gAspA ++ [.tool .a, .g0 40 20 5 3000, .g1 (-10) 300]) = false ∧
     gcodeValid .oa (compileSec sFull) = false ∧
     gcodeValid .ab [.tool .a, .g0 10 20 5 3000] = false ∧
     gcodeValid .ab (gHome ++ [.tool .a, .g0 10 20 5 0]) = false := by decide
 
 theorem cycle_laws :
-    let p1 := stepCycle (stepCycle v0 .ab (.toggle .toggleB) .agent) .oa .id .agent
-    let p2 := stepCycle (stepCycle v0 .oa .id .agent) .oa (.toggle .toggleB) .agent
-    let cal := stepCycle (stepCycle v0 .oa (.toggle .toggleA) .agent) .oa (.toggle .toggleA) .agent
+    let p1 := stepCycle (stepCycle v0 env0 (.toggle .toggleB) .agent) env1 .id .agent
+    let p2 := stepCycle (stepCycle v0 env1 .id .agent) env1 (.toggle .toggleB) .agent
+    let cal := stepCycle (stepCycle v0 env1 (.toggle .toggleA) .agent) env1 (.toggle .toggleA) .agent
+    kernelLaws = true ∧
     p1.sec = p2.sec ∧
     p1.writes = 2 ∧
     p2.writes = 1 ∧
     p2.events = [.writeRestrict, .notAdmitted] ∧
     act cal.rel cal.anchorSec = cal.sec ∧
     cal.sec = ⟨false, false, true⟩ ∧
-    gcodeValid cal.openSet (compileSec cal.sec) = true ∧
-    stepCycle cal .oa .other .agent = stepCycle cal .oa .other .orchestrator := by decide
+    gcodeValid cal.env.openSet (compileSec cal.sec) = true ∧
+    stepCycle cal env1 .other .agent = stepCycle cal env1 .other .orchestrator := by decide
 
 theorem state_space_laws :
-    let seqA := stepCycle v0 .ab .sequence .agent
-    let seqO := stepCycle v0 .ab .sequence .orchestrator
-    let cir := stepCycle v0 .ab .circuit .agent
-    let pre := stepCycle v0 .oa .sequence .agent
+    let seqA := stepCycle v0 env0 .sequence .agent
+    let seqO := stepCycle v0 env0 .sequence .orchestrator
+    let cir  := stepCycle v0 env0 .circuit .agent
+    let pre  := stepCycle v0 env1 .sequence .agent
+    let c0 := stepCycle v0 env0 .id .agent
+    let c1 := stepCycle c0 env1 (.toggle .toggleA) .agent
+    let c2 := stepCycle c1 env1 (.toggle .toggleA) .agent
+    let c3 := stepCycle c2 env1 (.toggle .toggleB) .agent
+    let c4 := stepCycle c3 env1 .unpaired .agent
+    let c5 := stepCycle c4 env1 .unpaired .orchestrator
+    let c6 := stepCycle c5 env1 .sequence .agent
+    let c7 := stepCycle c6 env1 .circuit .orchestrator
     chartLaw = true ∧
     orbitLaw = true ∧
     iota .ab = ⟨false, false, true⟩ ∧
+    phiSyn .oa .ab = some ⟨false, false, true⟩ ∧
+    phiSyn .oa .e = none ∧
     supported .oa (iota .e) = false ∧
     gcodeValid .ab (compileSec (iota .ab)) = true ∧
     seqA.events = [.illFormed] ∧
@@ -439,17 +554,23 @@ theorem state_space_laws :
     cir = seqA ∧
     pre.events = [.writeRestrict] ∧
     pre.writes = 1 ∧
-    pre.sec = ⟨true, false, true⟩ := by decide
+    pre.sec = ⟨true, false, true⟩ ∧
+    c7.writes = 2 ∧
+    c7.sec = ⟨false, false, true⟩ ∧
+    c7.anchorSec = ⟨true, false, true⟩ ∧
+    c7.rel = .a ∧
+    c7.events = [.read, .writeRestrict, .writeToggle .toggleA, .notAdmitted,
+                 .illFormed, .illFormed, .illFormed, .illFormed] := by decide
 ```
 
-`[toggleA, toggleB]` and `[toggleB, toggleA]` are distinct words denoting the same element `ab` and the same section `(A off, B off, home on)`. Across adaptation, order becomes observationally non-commutative (`cycle_laws`): `toggle-b` then `restrict(a)` writes two versions, whereas `restrict(a)` then `toggle-b` writes one version and refuses the second (`not-admitted`), though both end at `(A on, B off, home on)`. `state_space_laws` names that section `Φ_syn(ab)`. The orbit of `sFull` under `V4` is every home-on section, the geometric product commutes, and the commutator is `e`. On a stable open, `sequence` and `circuit` are `ill-formed` and allocate no version; on a descent, `restrict` preempts them.
+`[toggleA, toggleB]` and `[toggleB, toggleA]` are distinct words denoting the same element `ab` and the same section `(A off, B off, home on)`. Across adaptation, order becomes observationally non-commutative (`cycle_laws`): `toggle-b` then `restrict(a)` writes two versions, whereas `restrict(a)` then `toggle-b` writes one version and refuses the second (`not-admitted`), though both end at `(A on, B off, home on)`. `state_space_laws` names `(A off, B off, home on)` as `Φ_syn(ab, ab)` on `ab` and `Φ_syn(a, ab)` on `a` (both mapping to `iota(ab)`), while `Φ_syn(a, e) = none`. The orbit of `sFull` under `V4` is every home-on section, the geometric product commutes, and the commutator is `e`. On a stable open, `sequence` and `circuit` are `ill-formed` and allocate no version; on a descent, `restrict` preempts them.
 
 ## 3. Grammar (`~EBNF`)
 
 ```ebnf
-pro          = markdown_raw | manifest , { node_block | markdown_prose } ;
-manifest     = "::meta"   , NL , { kv_line } , "::end" , NL ,
-               "::schema" , NL , { kv_line } , "::end" , NL ,
+pro          = markdown_raw | manifest , { NL | node_block | markdown_prose } ;
+manifest     = "::meta"   , NL , { kv_line } , "::end" , NL , { NL } ,
+               "::schema" , NL , { kv_line } , "::end" , NL , { NL } ,
                "::index"  , NL , { "#" , TEXT_LINE , NL | index_row } , "::end" , NL ;
 kv_line      = id , ":" , WS , TEXT_LINE , NL ;
 index_row    = id , WS , "|" , WS , node_type , WS , "|" , WS , scope , WS , "|" , WS , TEXT_LINE , NL ;
@@ -467,9 +588,11 @@ id_list      = id , { "," , id } ;
 node_type    = "procedure" | "step" | "gate" | "transform" | "environment" |
                "version" | "invariant" | "meta" ;
 scope        = "all" | "agent" | "orchestrator" ;
-fenced_code  = "```" , ( "gcode" | "tla" | "lean" | "mermaid" | id ) , NL , VERBATIM , "```" , NL ;
-colon_block  = "::" , id , [ WS , "[" , attr , { WS , attr } , "]" ] , NL ,
+fenced_code  = "```gcode" , NL , gcode_prog , "```" , NL
+             | "```" , ( "tla" | "lean" | "mermaid" ) , NL , VERBATIM , "```" , NL ;
+colon_block  = "::" , block_tag , [ WS , "[" , attr , { WS , attr } , "]" ] , NL ,
                VERBATIM , "::end" , NL ;
+block_tag    = "warning" | "table" | "full" | "logic" ;
 edge_decl    = ( "->" | "<-" | "<>" ) , "[:" , edge_type , { WS , attr } , "]" ,
                WS , target , { "," , [ WS ] , target } , NL ;
 edge_type    = "contains" | "requires" | "precedes" | "couples" | "acts" |
@@ -479,26 +602,26 @@ id           = ( LETTER | "_" ) , { LETTER | DIGIT | "_" | "-" } ;
 gcode_prog   = gcode_line , { gcode_line } ;
 gcode_line   = [ "N" , NUMBER , WS ] , gcode_word , { WS , gcode_word } ,
                [ WS , ";" , TEXT_LINE ] , NL ;
-gcode_word   = ( "G" | "M" | "T" | "X" | "Y" | "Z" | "E" | "F" | "P" | "S" ) ,
-               [ "-" ] , NUMBER ;
+gcode_word   = ( "G" | "M" | "T" | "F" | "P" | "S" ) , NUMBER
+             | ( "X" | "Y" | "Z" | "E" ) , [ "-" ] , NUMBER ;
 ```
 
-The closed `attr_key` and `gcode_word` productions govern manifested `.pro` graphs: every robotic `step` embeds a `gcode` fence conforming to `gcode_prog`, and no attribute or executable word can encode a sequence, organism, strain, toxin, or patient identifier. Raw CommonMark remains a valid link graph under the superset axiom, but cannot set `current=true`.
+The closed `attr_key`, `block_tag`, `fenced_code`, and `gcode_word` productions govern manifested `.pro` graphs: every robotic `step` and materialized `version` embeds a `gcode` fence conforming to `gcode_prog`, and no attribute, block tag, or executable word can encode a sequence, organism, strain, toxin, genetic part, chassis, patient identifier, diagnosis, treatment, or administration instruction. Raw CommonMark remains a valid link graph under the superset axiom, but cannot set `current=true`.
 
-A state-space chart is not a grammar extension. `locus` and `program` interpret an `open` and a `V4` element. They are not `attr_key`s, and a chart cannot introduce a nucleotide, genetic part, organism, chassis, or gene token. Natural-language annotations stay in `TEXT_LINE` and in `;` comments. The runtime names for a refused chart input are the proposals `sequence` and `circuit`. `Admit` classifies both as `ill-formed`. A circuit step is admitted only when its proposal is already `id`, `toggle-a`, `toggle-b`, or `restrict`.
+A state-space chart is not a grammar extension. `locus` and `program` interpret an `open` and a `V4` element in `Φ_syn(locus, program)`. They are not `attr_key`s, and a chart cannot introduce a nucleotide, genetic part, organism, chassis, or gene token. Natural-language annotations stay in `TEXT_LINE` and in `;` comments. The runtime names for a refused chart input are the proposals `sequence` and `circuit`; `Admit` classifies both as `ill-formed`. A circuit step is admitted only when its proposal is already `id`, `toggle-a`, `toggle-b`, or `restrict`.
 
 ## 4. Realtime & Local Adaptation Logic (`tla`)
 
-Each cycle evaluates `Admit` deterministically over the four environment components (`updates`, `constraints`, `operators`, `hardware`), one proposal, and caller `scope`. `hardware` induces open `V`; `updates` (`upd`) are trace heartbeats excluded from snapshot equality; `operators` (`ops`), `constraints` (`policy`), and `.gcode` plunger conservation (`GCodeValid`) are checked on the candidate marking `(x', y')`:
+Each cycle evaluates `Admit` deterministically over the environment snapshot (`hardware`, `operators`, `constraints`, excluding heartbeat `updates`), one proposal, and caller `scope` (`agent` or `orchestrator`; visibility scope `all` is rejected as `ill-formed`). `hardware` induces open `V`; `operators` (`ops`), `constraints` (`policy`), and `.gcode` plunger conservation (`GCodeValid`) are checked on the candidate marking `(x', y')`:
 
 | Snapshot `(V, ops', policy')` | Proposal | Condition on candidate `q` | Result |
 |---|---|---|---|
 | `= (U, ops, policy)` (including `upd` change) | `id` or `restrict` | current state | `read` |
-| `= (U, ops, policy)` | `toggle-a` | `HasA(U) /\ Covers(ops, q) /\ PolicyOK(policy, q) /\ GCodeValid(U, q)` | `write-toggle-a` |
+| `= (U, ops, policy)` | `toggle-a` | `InSubgroup(U, "a") /\ Covers(ops, q) /\ PolicyOK(policy, q) /\ GCodeValid(U, q)` | `write-toggle-a` |
 | `= (U, ops, policy)` | `toggle-a` | well-formed toggle failing open, operator, or policy gate | `not-admitted` |
-| `= (U, ops, policy)` | `toggle-b` | `HasB(U) /\ Covers(ops, q) /\ PolicyOK(policy, q) /\ GCodeValid(U, q)` | `write-toggle-b` |
+| `= (U, ops, policy)` | `toggle-b` | `InSubgroup(U, "b") /\ Covers(ops, q) /\ PolicyOK(policy, q) /\ GCodeValid(U, q)` | `write-toggle-b` |
 | `= (U, ops, policy)` | `toggle-b` | well-formed toggle failing open, operator, or policy gate | `not-admitted` |
-| `= (U, ops, policy)` | `unpaired-gcode`, `sequence`, `circuit`, `other`, or payload outside `empty`, `water` | any | `ill-formed` |
+| `= (U, ops, policy)` | `unpaired-gcode`, `sequence`, `circuit`, `other`, caller outside `Scopes`, or payload outside `empty`, `water` | any | `ill-formed` |
 | `# (U, ops, policy)` with `V <= U` | any (preempted) | `q = Restrict(V, a, b)` passes `Covers`, `PolicyOK`, `GCodeValid` | `write-restrict` |
 | `# (U, ops, policy)` with `V <= U` | any (preempted) | `q = Restrict(V, a, b)` fails `Covers` or `PolicyOK` | `ill-formed-environment` |
 | `# (U, ops, policy)` with `~Le(V, U)` | any (preempted) | larger or incomparable open | `no-extension` |
@@ -536,6 +659,12 @@ Supported(u, x, y) ==
   /\ (x = 0 \/ HasA(u))
   /\ (y = 0 \/ HasB(u))
 
+InSubgroup(u, g) ==
+  CASE g = "e"  -> TRUE
+    [] g = "a"  -> HasA(u)
+    [] g = "b"  -> HasB(u)
+    [] g = "ab" -> HasA(u) /\ HasB(u)
+
 Covers(os, x, y) ==
   /\ "home" \in os
   /\ ((x = 1 \/ y = 1) => {"aspirate", "dispense"} \subseteq os)
@@ -546,14 +675,16 @@ PolicyOK(p, x, y) ==
 
 PlungerResidual(asp, disp) == 10 * asp - 10 * disp
 
+ChannelRunOK(d1, d2) ==
+  /\ d1 >= 0
+  /\ d1 + d2 = 0
+
 GCodeValid(u, h, aspA, dispA, aspB, dispB) ==
   /\ h = 1
   /\ (aspA = 1 \/ dispA = 1 => HasA(u))
   /\ (aspB = 1 \/ dispB = 1 => HasB(u))
-  /\ PlungerResidual(aspA, dispA) >= 0
-  /\ PlungerResidual(aspB, dispB) >= 0
-  /\ PlungerResidual(aspA, dispA) = 0
-  /\ PlungerResidual(aspB, dispB) = 0
+  /\ ChannelRunOK(10 * aspA, -10 * dispA)
+  /\ ChannelRunOK(10 * aspB, -10 * dispB)
 
 Mul(g, h) ==
   CASE g = "e" -> h
@@ -563,11 +694,20 @@ Mul(g, h) ==
     [] {g, h} = {"a", "ab"} -> "b"
     [] {g, h} = {"b", "ab"} -> "a"
 
+Commutator(g, h) == Mul(Mul(Mul(g, h), g), h)
+
 Act(g, x, y) ==
   CASE g = "e"  -> <<x, y>>
     [] g = "a"  -> <<1 - x, y>>
     [] g = "b"  -> <<x, 1 - y>>
     [] g = "ab" -> <<1 - x, 1 - y>>
+
+Iota(g) == Act(g, 1, 1)
+
+InChartRob(u, p, x, y) ==
+  /\ Supported(u, x, y)
+  /\ PolicyOK(p, x, y)
+  /\ GCodeValid(u, 1, x, x, y, y)
 
 Admit(u, x, y, os, pol, v, newOps, newPol, prop, sc) ==
   IF sc \notin Scopes THEN "ill-formed"
@@ -581,12 +721,12 @@ Admit(u, x, y, os, pol, v, newOps, newPol, prop, sc) ==
   ELSE
     CASE prop \in {"id", "restrict"} -> "read"
       [] prop = "toggle-a" ->
-           IF HasA(u) /\ Covers(os, 1 - x, y) /\ PolicyOK(pol, 1 - x, y)
+           IF InSubgroup(u, "a") /\ Covers(os, 1 - x, y) /\ PolicyOK(pol, 1 - x, y)
               /\ GCodeValid(u, 1, 1 - x, 1 - x, y, y)
            THEN "write-toggle-a"
            ELSE "not-admitted"
       [] prop = "toggle-b" ->
-           IF HasB(u) /\ Covers(os, x, 1 - y) /\ PolicyOK(pol, x, 1 - y)
+           IF InSubgroup(u, "b") /\ Covers(os, x, 1 - y) /\ PolicyOK(pol, x, 1 - y)
               /\ GCodeValid(u, 1, x, x, 1 - y, 1 - y)
            THEN "write-toggle-b"
            ELSE "not-admitted"
@@ -627,9 +767,10 @@ ConstraintOK  == PolicyOK(policy, a, b)
 InstructionOK == GCodeValid(open, 1, a, a, b, b)
 
 GCodeSubgroupLaw ==
-  \A h, a1, a2, b1, b2 \in 0..1 :
-    GCodeValid(open, h, a1, a2, b1, b2) <=>
-      (h = 1 /\ a1 = a2 /\ b1 = b2 /\ Supported(open, a1, b1))
+  /\ ~ChannelRunOK(-10, 10)
+  /\ \A h, a1, a2, b1, b2 \in 0..1 :
+       GCodeValid(open, h, a1, a2, b1, b2) <=>
+         (h = 1 /\ a1 = a2 /\ b1 = b2 /\ Supported(open, a1, b1))
 
 VersionLaw ==
   /\ (event = "init" => version = 0 /\ priorVersion = 0 /\ anchorVersion = 0)
@@ -640,11 +781,13 @@ VersionLaw ==
       => version = priorVersion + 1)
 
 ParentLaw ==
-  /\ (transform = "id" => version = 0)
-  /\ (transform = "toggle-a" => parentA = 1 - a /\ parentB = b)
-  /\ (transform = "toggle-b" => parentA = a /\ parentB = 1 - b)
+  /\ (transform = "id" => version = 0 /\ anchorVersion = 0 /\ rel = "e")
+  /\ (transform = "toggle-a" => parentA = 1 - a /\ parentB = b /\ anchorVersion < version)
+  /\ (transform = "toggle-b" => parentA = a /\ parentB = 1 - b /\ anchorVersion < version)
   /\ (transform = "restrict" =>
-        a <= parentA /\ b <= parentB /\ rel = "e" /\ anchorVersion = version)
+        <<a, b>> = Restrict(open, parentA, parentB) /\
+        <<anchorA, anchorB>> = <<a, b>> /\
+        rel = "e" /\ anchorVersion = version)
 
 AnchorLaw ==
   /\ anchorVersion <= version
@@ -652,7 +795,9 @@ AnchorLaw ==
   /\ Act(rel, anchorA, anchorB) = <<a, b>>
 
 HeartbeatLaw ==
-  (event = "read" /\ upd # priorUpd) => version = priorVersion
+  /\ (upd # priorUpd /\ event = "read" => version = priorVersion)
+  /\ \A pr \in {"id", "restrict"}, sc \in Scopes :
+       Admit(open, a, b, ops, policy, open, ops, policy, pr, sc) = "read"
 
 ScopeParity ==
   \A v \in Opens, os \in SUBSET Ops, p \in Policies, pr \in Proposals :
@@ -666,23 +811,26 @@ PreemptLaw ==
         {"write-restrict", "no-extension", "ill-formed-environment"}
 
 ChartLaw ==
+  /\ InChartRob(open, policy, a, b)
+  /\ Cardinality({g \in Relations : Iota(g) = <<a, b>> /\ Supported(open, a, b)}) = 1
   /\ \A g \in Relations :
-       LET xy == Act(g, 1, 1)
-       IN /\ Supported("ab", xy[1], xy[2])
-          /\ PolicyOK("pairing", xy[1], xy[2])
+       LET xy == Iota(g)
+       IN /\ InChartRob("ab", "pairing", xy[1], xy[2])
           /\ Mul(g, g) = "e"
           /\ \A h \in Relations :
                /\ Mul(g, h) = Mul(h, g)
-               /\ Act(h, xy[1], xy[2]) = Act(Mul(g, h), 1, 1)
-  /\ PolicyOK("single", 1, 1) = FALSE
-  /\ PolicyOK("single", 0, 1)
-  /\ PolicyOK("single", 1, 0)
-  /\ PolicyOK("single", 0, 0)
+               /\ Commutator(g, h) = "e"
+               /\ Act(h, xy[1], xy[2]) = Iota(Mul(g, h))
+  /\ ~InChartRob("ab", "single", 1, 1)
+  /\ InChartRob("ab", "single", 0, 1)
+  /\ InChartRob("ab", "single", 1, 0)
+  /\ InChartRob("ab", "single", 0, 0)
 
 SequenceLaw ==
-  \A sc \in Scopes :
-    /\ Admit(open, a, b, ops, policy, open, ops, policy, "sequence", sc) = "ill-formed"
-    /\ Admit(open, a, b, ops, policy, open, ops, policy, "circuit", sc) = "ill-formed"
+  /\ \A pr \in Proposals :
+       Admit(open, a, b, ops, policy, open, ops, policy, pr, "all") = "ill-formed"
+  /\ \A pr \in {"unpaired-gcode", "sequence", "circuit", "other"}, sc \in Scopes :
+       Admit(open, a, b, ops, policy, open, ops, policy, pr, sc) = "ill-formed"
 
 Hold(out, newUpd, sc) ==
   /\ priorVersion' = version
@@ -787,7 +935,7 @@ Spec == Init /\ [][Next]_vars
 ````markdown
 ::meta
 title: CAL-1937-001
-version: 1.2.0
+version: 1.2.1
 fixture: CAL-1937-001
 domain: bio/med
 fields: robotic|synthetic
@@ -961,14 +1109,17 @@ Cal1937OK ==
   /\ Restrict("a", 1, 1) = <<1, 0>>
   /\ Admit("a", 1, 0, Ops, "pairing", "a", Ops, "pairing", "toggle-a", "agent") = "write-toggle-a"
   /\ Act("a", 1, 0) = <<0, 0>>
+  /\ Iota("ab") = <<0, 0>> /\ Supported("a", 0, 0) /\ ~Supported("a", 1, 1)
   /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "toggle-b", "agent") = "not-admitted"
-  /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "unpaired-gcode", "agent") =
-     Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "unpaired-gcode", "orchestrator")
+  /\ Admit("a", 0, 0, Ops, "pairing", "ab", Ops, "pairing", "id", "agent") = "no-extension"
+  /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "unpaired-gcode", "agent") = "ill-formed"
+  /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "unpaired-gcode", "orchestrator") = "ill-formed"
   /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "sequence", "agent") = "ill-formed"
   /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "sequence", "orchestrator") = "ill-formed"
   /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "circuit", "agent") = "ill-formed"
-  /\ Mul("a", "b") = Mul("b", "a")
-  /\ Act("a", Act("b", 1, 1)[1], Act("b", 1, 1)[2]) = Act(Mul("b", "a"), 1, 1)
+  /\ Admit("a", 0, 0, Ops, "pairing", "a", Ops, "pairing", "circuit", "orchestrator") = "ill-formed"
+  /\ Mul("a", "b") = Mul("b", "a") /\ Commutator("a", "b") = "e"
+  /\ Act("a", Iota("b")[1], Iota("b")[2]) = Iota(Mul("b", "a"))
 ```
 ::end
 
@@ -1091,7 +1242,7 @@ flowchart LR
   dispB --- slotB
 ```
 
-The type graph retains both channels (`T0`, `T1`) and both synthetic water slots (`slot-a`, `slot-b`). `ver-2` is `current=true` and emits `N10..N20` (`step-home` only); applying its stored `inverse=tx-a` reconstructs `ver-1` via `act(rel, anchorSec)`, whereas the sheaf restriction from `ver-0` to `ver-1` has no group inverse. `ver-2`'s section is `(A off, B off, home on)`. That section is `Φ_syn(ab)` measured from `sFull`, and it is `act(a, anchorSec)` measured from the restricted anchor. Axiom 8 keeps those relations distinct. A `sequence` or `circuit` proposal does not leave `ver-2`. The synthetic slots stay `water`.
+The type graph retains both channels (`T0`, `T1`) and both synthetic water slots (`slot-a`, `slot-b`). `ver-2` is `current=true` and emits `N10..N20` (`step-home` only); applying its stored `inverse=tx-a` reconstructs `ver-1` via `act(rel, anchorSec)`, whereas the sheaf restriction from `ver-0` to `ver-1` has no group inverse. `ver-2`'s section is `(A off, B off, home on)`: in the synthetic-biology chart on locus `a`, it is `Φ_syn(a, ab)` (`iota(ab)` measured from `sFull`), and relative to `ver-1` (`Φ_syn(a, b)`), it is `act(a, anchorSec)`. Axiom 8 keeps those relations distinct. A `sequence` or `circuit` proposal does not leave `ver-2`, and the synthetic slots stay `water`.
 
 ## 6. Falsification
 
@@ -1099,19 +1250,19 @@ Each row is a challenge. The failure signal is what a conforming read returns.
 
 | Challenge | Failure signal |
 |---|---|
-| Write a robotic step in free-form prose, omit `G21 G90 M83` + `G28`, or set feedrate `F0` | Grammar requires a `gcode` block matching `gcode_prog`; `gcodeValid` rejects unhomed moves and `f = 0`. |
-| Toggle `step-asp-a` (`G1 E10`) without `step-disp-a` (`G1 E-10`), or reverse `:precedes` (`disp-a` before `asp-a`) | `gcodeCharacterization` and `GCodeSubgroupLaw` reject `a1 != a2` (`PlungerResidual = 10 # 0`); `gDispA ++ gAspA` fails `0 <= loadA + (-10)`. |
-| Confuse Mazurkiewicz channel commutation with adaptation commutation | `compileSec` (`T0` then `T1`) and `compileSecBA` (`T1` then `T0`) both pass `gcodeTraceCommute` on `ab`, whereas `toggle-b; restrict(a)` writes `2` versions and `restrict(a); toggle-b` writes `1` then `not-admitted`. |
-| Store a toggle version without `inverse`, or read `rel=e` after `restrict` as erasing history | Toggle versions require generator `inverse`; `restrict` resets `anchor` to itself (`AnchorLaw`) while `parent` retains prior transforms. |
-| Restrict to open `a` twice expecting `T1` to return, or expand from `a` to `ab` / incomparable `b` | Restriction is idempotent (`B` stays off); `~Le(v, open)` yields `no-extension` and holds the version. |
-| Propose `toggle-b` on open `ab` under `policy = "single"` while `A` is enabled, or drop `dispense` from `ops` while `A` stays on | `Admit` returns `not-admitted` when `PolicyOK("single", 1, 1)` fails on `ab`, and `ill-formed-environment` when `Covers` fails on descent. |
-| Let an `ill-formed` or `toggle-a` proposal block a valid hardware descent | `PreemptLaw` holds: `adapt-procedure-locally` preempts the proposal and writes `restrict`. |
+| Write a robotic step in free-form prose, omit `G21 G90 M83` + `G28`, re-home `G28` after motion, omit `M400` after `G1`, or set feedrate `F0` | Grammar wires `gcode` fences directly to `gcode_prog`; `gcodeValid` rejects unhomed moves, duplicate `G28` (`!m.homed`), unsynced plungers (`!m.syncA`), and `f = 0`. |
+| Toggle `step-asp-a` (`G1 E10`) without `step-disp-a` (`G1 E-10`), or reverse `:precedes` (`disp-a` before `asp-a`) | `gcodeCharacterization` and `GCodeSubgroupLaw` reject `a1 != a2` (`PlungerResidual = 10 # 0`); `gDispA ++ gAspA` and `ChannelRunOK(-10, 10)` fail prefix-load non-negativity (`0 <= loadA + (-10)`). |
+| Confuse Mazurkiewicz channel commutation with adaptation commutation | All six `:precedes` linearizations in `traceLinearizations` pass `gcodeTraceCommute` on `ab`, whereas `toggle-b; restrict(a)` writes `2` versions and `restrict(a); toggle-b` writes `1` then `not-admitted`. |
+| Store a toggle version without `inverse`, or read `rel=e` after `restrict` as erasing history | Toggle versions require generator `inverse` and `anchorVersion < version`; `restrict` resets `anchor` to itself (`ParentLaw`, `AnchorLaw`) while `parent` retains prior transforms. |
+| Restrict to open `a` twice expecting `T1` to return, treat `restrict` as a `V4` element, or expand from `a` to `ab` / incomparable `b` | Restriction is idempotent (`B` stays off) and `sheafLaws` proves no `h in V4` induces `restrict .oa`; `~Le(v, open)` yields `no-extension` and holds the version. |
+| Propose `toggle-b` on open `ab` under `policy = "single"` while `A` is enabled, or drop `dispense` from `ops` while `A` stays on | `Admit` returns `not-admitted` when `PolicyOK("single", 1, 1)` fails on `ab`, and `ill-formed-environment` when `Covers` fails on descent (`kernelLaws`). |
+| Let an `ill-formed` or `toggle-a` proposal block a valid hardware descent | `PreemptLaw` and `kernelLaws` hold: `adapt-procedure-locally` preempts the proposal and writes `restrict`. |
 | Retarget `T1` blocks onto `T0`, or glue sections disagreeing on `home` or an overlap channel | `gcodeValid .oa (compileSec sFull) = false`; `glue .oa .ob` with mismatched `home` and `glue .ab .oa` with mismatched `armA` both return `none`. |
-| Allocate a version on an `updates`-only heartbeat, or admit two transforms in one cycle | `HeartbeatLaw` keeps `version = priorVersion` (`event = "read"`); `Cycle` admits at most one transform. |
-| Read the geometric product as the anticommuting Euclidean rule `a*b = -b*a` | `mul` is commutative and of exponent 2; `commutator g h = e` for every pair (`state_space_laws`). The carrier stores no sign. |
-| Take a nucleotide sequence, genetic part, organism, chassis, or a bare `circuit` step as a `(locus, program)` coordinate | `locus` is only an open and `program` is only a `V4` element. `Admit` on `sequence` or `circuit` returns `ill-formed` for both scopes and holds the version. A descent still preempts that proposal and writes `restrict`. |
-| Expect `Φ_syn(e)` to stay supported on open `a`, or to compile there | `supported .oa (iota .e) = false`. Descent is `restrict`, which has `inverse=none` and is not a group element. |
-| Escalate privilege via `scope=orchestrator`, smuggle a sequence/organism/toxin/patient token into attributes or `.gcode` words, skip `::warning`, or treat `ACT` as hardware execution | `ScopeParity` equates `agent` and `orchestrator`; closed `attr_key` and numeric `gcode_word` reject non-conformant tokens; skipping `::warning` invalidates traversal; `ACT` returns a specification under `DISCLAIMER`. |
+| Allocate a version on an `updates`-only heartbeat, or admit two transforms in one cycle | `HeartbeatLaw` and `kernelLaws` prove unchanged `(open, ops, policy)` with `id` or `restrict` emits `read` and keeps `version = priorVersion`; `Cycle` admits at most one transform. |
+| Read the geometric product as the anticommuting Euclidean rule `a*b = -b*a` | `mul` is commutative and of exponent `2`; `commutator g h = e` for every pair (`state_space_laws`, `ChartLaw`). The carrier stores no sign. |
+| Take a nucleotide sequence, genetic part, organism, chassis, or a bare `circuit` step as a `(locus, program)` coordinate | `locus` is only an open and `program` is only a `V4` element in `Φ_syn(locus, program)`. `Admit` on `sequence` or `circuit` returns `ill-formed` for both scopes and holds the version; descent still preempts and writes `restrict`. |
+| Expect `Φ_syn(a, e)` to stay defined on open `a`, or `iota(e)` to compile there | `phiSyn .oa .e = none` and `supported .oa (iota .e) = false`. Descent is `restrict`, which has `inverse=none` and is not a group element. |
+| Pass visibility scope `all` as caller provenance, escalate via `scope=orchestrator`, smuggle a sequence/organism/strain/toxin/part/chassis/patient token into attributes, block tags, or `.gcode` words, skip `::warning`, or treat `ACT` as hardware execution | `Admit(..., "all") = "ill-formed"` (`SequenceLaw`, `kernelLaws`); `ScopeParity` equates `agent` and `orchestrator`; closed `attr_key`, `block_tag`, `fenced_code`, and `gcode_word` reject non-conformant tokens; skipping `::warning` invalidates traversal; `ACT` returns a specification under `DISCLAIMER`. |
 
 `v4_laws`, `sheaf_laws`, `gcode_laws`, `cycle_laws`, and `state_space_laws` (`Lean 4.35.0`), together with `TypeOK`, `SectionOK`, `OperatorOK`, `ConstraintOK`, `InstructionOK`, `GCodeSubgroupLaw`, `VersionLaw`, `ParentLaw`, `AnchorLaw`, `HeartbeatLaw`, `ScopeParity`, `PreemptLaw`, `ChartLaw`, `SequenceLaw`, and `Cal1937OK` (`SANY` + `TLC2`), are the discharged checks.
 
